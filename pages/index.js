@@ -1,22 +1,91 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { getSession } from "next-auth/react";
 import { isAuthenticated } from "../utils/isAuthenticated";
 
 export default function Home({ hello }) {
 
+  const [player, setPlayer] = useState(null)
+  const [isPaused, setPaused] = useState(false);
+  const [isActive, setActive] = useState(false);
+  const [activeSession, setActiveSession] = useState({})
+
+  const track = {
+    name: "",
+    album: {
+      images: [
+        { url: "" }
+      ]
+    },
+    artists: [
+      { name: "" }
+    ]
+  }
+  const [currentTrack, setTrack] = useState(track);
+
   const fetchSession = async () => {
     const session = await getSession()
-    console.log(session)
+    setActiveSession(session)
+    const accessToken = session.user.accessToken
+
+    const script = document.createElement("script");
+    script.src = "https://sdk.scdn.co/spotify-player.js";
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    window.onSpotifyWebPlaybackSDKReady = () => {
+
+      const player = new window.Spotify.Player({
+        name: 'Imagining 1',
+        getOAuthToken: cb => { cb(accessToken); },
+        volume: 0.5
+      });
+
+      setPlayer(player);
+
+      player.addListener('ready', ({ device_id }) => {
+        console.log('Ready with Device ID', device_id);
+      });
+
+      player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID has gone offline', device_id);
+      });
+
+      player.addListener('player_state_changed', (state => {
+
+        if (!state) {
+          return;
+        }
+  
+        setTrack(state.track_window.current_track);
+        setPaused(state.paused);
+  
+        player.getCurrentState().then(state => {
+          (!state) ? setActive(false) : setActive(true)
+        });
+  
+      }));
+
+      player.connect();
+    };
   }
 
   useEffect(() => {
     fetchSession()
   }, [])
 
+
+  const handleNext = () => {}
+
   return (
     <div>
       {hello}
-      <div>AUTHEN</div>
+      <button onClick={() => {
+        player.togglePlay()
+        player.activateElement()
+      }}> PLAY </button>
+      <button onClick={handleNext}> NEXT </button>
+      <p>{JSON.stringify(currentTrack)}</p>
     </div>
   );
 }
