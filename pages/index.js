@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getSession } from "next-auth/react";
 import { isAuthenticated } from "../utils/isAuthenticated";
+import { tables } from "../external/airtable"
 
 export default function Home({ hello }) {
 
@@ -70,8 +71,14 @@ export default function Home({ hello }) {
     };
   }
 
+  const fetchTables = async () => {
+    const result = await tables()
+    console.log(result)
+  }
+
   useEffect(() => {
     fetchSession()
+    fetchTables()
   }, [])
 
 
