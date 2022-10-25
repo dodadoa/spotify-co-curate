@@ -12,3 +12,19 @@ export const tables = async () => {
     config
   )
 }
+
+export const createRecord = async (body) => {
+  try {
+    const result = axios.post(
+      "https://api.airtable.com/v0/appqFEOQnCcbDegfP/Table%201",
+      body,
+      {
+        ...config,
+        "Content-Type": "application/json"
+      }
+    )
+    return result
+  } catch (error) {
+    throw error
+  }
+}
