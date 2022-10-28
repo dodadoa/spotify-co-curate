@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { getSession } from "next-auth/react";
 import { isAuthenticated } from "../utils/isAuthenticated";
+import { tables } from '../external/airtable'
 
 export default function Home({ hello }) {
 
   const [player, setPlayer] = useState(null)
+  const [changing, setChanging] = useState(0)
   const [isPaused, setPaused] = useState(false);
   const [isActive, setActive] = useState(false);
   const [activeSession, setActiveSession] = useState({})
@@ -70,11 +72,27 @@ export default function Home({ hello }) {
     };
   }
 
+  const fetchTablesAndRandomOneSong = async () => {
+    try {
+      const result = await tables()
+      console.log(result)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const refresh = async () => {
+    await fetchTablesAndRandomOneSong()
+    setTimeout(refresh, 5000)
+  }
 
   useEffect(() => {
     fetchSession()
   }, [])
 
+  useEffect(() => {
+    setTimeout(refresh, 5000);
+  }, [])
 
   const handleNext = () => {}
 
