@@ -19,8 +19,10 @@ export const createRecord = async (body) => {
       "https://api.airtable.com/v0/appqFEOQnCcbDegfP/Table%201",
       body,
       {
-        ...config,
-        "Content-Type": "application/json"
+        headers: {
+          ...config.headers,
+          "Content-Type": "application/json"
+        }
       }
     )
     return result
