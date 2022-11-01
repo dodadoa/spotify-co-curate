@@ -16,6 +16,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.38.0",
     "request": "^2.88.2",
+    "spotify-web-api-js": "^1.5.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
