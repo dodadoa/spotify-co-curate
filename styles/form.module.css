@@ -1,0 +1,19 @@
+.form {
+  width: 100vw;
+  height: 100vh;
+  
+}
+
+.formBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 60vh;
+  width: 100vw;
+  margin-top: 20vh;
+}
+
+.formBody input[type=submit] {
+  width: 10vw;
+}
