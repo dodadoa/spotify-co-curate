@@ -76,3 +76,14 @@
   font-size: 20px;
   float: right;
 }
+
+.inputWrapper {
+  width: 100%;
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 35px;
+  right: 20px;
+}

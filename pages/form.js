@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Image from 'next/image'
 import { useForm } from "react-hook-form";
 import { createRecord, tables } from "../external/airtable";
 import { getSession } from "next-auth/react";
@@ -44,14 +45,19 @@ const Form = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={style.formBody}>
           <h1 className={style.header}> Join Our Playlist </h1>
-          <input className={style.input} onChange={(e) => search(e.target.value)} placeholder="Search for songs" />
+          <span className={style.inputWrapper}>
+            <input className={style.input} onChange={(e) => search(e.target.value)} placeholder="Search for songs" />
+            <div className={style.searchIcon}>
+              <Image width={20} height={20} src="/magnify.svg" alt="search" />
+            </div>
+          </span>
           <textarea className={style.textarea} {...register("caption", { required: true })} placeholder="Input caption about the song ..."  />
           <p>{errors.caption && <span>This field is required!</span>}</p>
           <input className={style.input} {...register("name", { required: true })} placeholder="Input your name" />
           <p>{errors.name && <span>This field is required!</span>}</p>
           
         </div>
-        <input className={style.submit} type="submit" value="submit"/>
+        <input class={style.submit} type="submit" value="submit"/>
       </form>
     </div>
   );
