@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react"
-import Image from 'next/image'
-import { useForm } from "react-hook-form"
-import { createRecord, tables } from "../external/airtable"
-import { getSession } from "next-auth/react"
-import { fetchAlbum } from "../external/spotify"
-import { isAuthenticated } from "../utils/isAuthenticated"
-import style from "../styles/form.module.css"
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { createRecord, tables } from "../external/airtable";
+import { getSession } from "next-auth/react";
+import { fetchAlbum } from "../external/spotify";
+import { isAuthenticated } from "../utils/isAuthenticated";
+import style from "../styles/form.module.css";
 
 const Form = () => {
+  const [searchResultDiv, setSearchResultDiv] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+
   const {
     register,
     handleSubmit,
@@ -15,16 +18,16 @@ const Form = () => {
     formState: { errors },
   } = useForm();
 
-  const [disabledSubmit, setDisabledSubmit] = useState(true)
-  const watchingForm = watch()
+  const [disabledSubmit, setDisabledSubmit] = useState(true);
+  const watchingForm = watch();
 
   useEffect(() => {
     if (!!watchingForm.caption && !!watchingForm.name) {
-      setDisabledSubmit(false)
+      setDisabledSubmit(false);
     } else {
-      setDisabledSubmit(true)
+      setDisabledSubmit(true);
     }
-  }, [watchingForm])
+  }, [watchingForm]);
 
   const onSubmit = async (data) => {
     try {
@@ -42,13 +45,48 @@ const Form = () => {
   };
 
   const search = async (text) => {
-    try {
-      const session = await getSession();
-      const accessToken = session.user.accessToken;
-      const result = await fetchAlbum(accessToken);
-      console.log(result);
-    } catch (error) {
-      console.log(error);
+    if (text.length > 0) {
+      try {
+        const session = await getSession();
+        const accessToken = session.user.accessToken;
+        const result = await fetchAlbum(accessToken);
+        console.log(result);
+
+        const response = await fetch(
+          `https://api.spotify.com/v1/search?type=track&q=${text}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const jsonResponse = await response.json();
+          console.log(jsonResponse);
+          if (!jsonResponse.tracks) {
+            return [];
+          }
+          setSearchResultDiv(true);
+          const track = jsonResponse.tracks.items.map((track) => ({
+            id: track.id,
+            name: track.name,
+            artist: track.artists[0].name,
+            album: track.album.name,
+            uri: track.uri,
+          }));
+          setSearchResults(track);
+          console.log(track);
+          return track;
+        } else {
+          throw new Error("search request failed");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      setSearchResults([]);
+      setSearchResultDiv(false);
     }
   };
 
@@ -58,25 +96,60 @@ const Form = () => {
         <div className={style.formBody}>
           <h1 className={style.header}> Join Our Playlist </h1>
           <span className={style.inputWrapper}>
-            <input className={style.input} onChange={(e) => search(e.target.value)} placeholder="Search for songs" />
-            <div className={style.searchIcon}>
-              <Image width={20} height={20} src="/magnify.svg" alt="search" />
+            {searchResultDiv ? (
+              <div className={style.searchResult}>
+                {searchResults.map((track) => {
+                  return (
+                    <div className={style.track}>
+                      <p>{track.name}</p>
+                      <br />
+                      <p>
+                        {track.artist} | {track.album}{" "}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <></>
+            )}
+            <div className={style.searchInput}>
+              <input
+                className={style.input}
+                onChange={(e) => search(e.target.value)}
+                placeholder="Search for songs"
+              />
+              <div className={style.searchIcon}>
+                <Image width={20} height={20} src="/magnify.svg" alt="search" />
+              </div>
             </div>
           </span>
-          <textarea className={style.textarea} {...register("caption", { required: true })} placeholder="Input caption about the song ..."  />
+          <textarea
+            className={style.textarea}
+            {...register("caption", { required: true })}
+            placeholder="Write caption about the song ..."
+          />
           <p>{errors.caption && <span>This field is required!</span>}</p>
-          <input className={style.input} {...register("name", { required: true })} placeholder="Input your name" />
+          <input
+            className={style.input}
+            {...register("name", { required: true })}
+            placeholder="Name ..."
+          />
           <p>{errors.name && <span>This field is required!</span>}</p>
-          
         </div>
-        <input class={disabledSubmit ? style.submitDisabled : style.submitActive} type="submit" value="submit" disabled={disabledSubmit}/>
+        <input
+          class={disabledSubmit ? style.submitDisabled : style.submitActive}
+          type="submit"
+          value="submit"
+          disabled={disabledSubmit}
+        />
       </form>
     </div>
   );
 };
 
 export const getServerSideProps = async (ctx) => {
-  const session = await getSession(ctx)
+  const session = await getSession(ctx);
 
   if (!(await isAuthenticated(session))) {
     return {
@@ -84,10 +157,10 @@ export const getServerSideProps = async (ctx) => {
         destination: "/login",
         permanent: false,
       },
-    }
+    };
   }
 
-  return { props: { hello: 'hello' } }
-}
+  return { props: { hello: "hello" } };
+};
 
 export default Form;
