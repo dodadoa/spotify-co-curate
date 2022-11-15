@@ -33,19 +33,22 @@ const Form = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <input onChange={(e) => search(e.target.value)} />
+    <div className="form-wrapper">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="form-group">
+          <h1>Join Our Playlist</h1>
+          <input placeholder="Search for songs" onChange={(e) => search(e.target.value)} />
 
-        <input  {...register("caption", { required: true })} />
-        {errors.caption && <span>This field is required</span>}
+          <textarea placeholder="Input caption about the song ..." {...register("caption", { required: true })} />
+          {errors.caption && <span>This field is required</span>}
 
-        <input {...register("name", { required: true })} />
-        {errors.name && <span>This field is required</span>}
+          <input placeholder="Input your name" {...register("name", { required: true })} />
+          {errors.name && <span>This field is required</span>}
 
-        <input type="submit" />
-      </div>
-    </form>
+          <input type="submit" />
+        </div>
+      </form>
+    </div>
   );
 }
 

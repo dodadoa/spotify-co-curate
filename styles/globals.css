@@ -24,3 +24,63 @@ a {
     background: black;
   }
 }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+.form-wrapper {
+  padding: 34px;
+}
+
+input {
+  width: 100%;
+  background-color: #222232;
+  color: #999CAD;
+  border-radius: 14px;
+  padding: 18px;
+  border: 1px solid #222232;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+input:active {
+  border: 1px solid #FFFFFF;
+  outline: none;
+}
+
+input:focus {
+  border: 1px solid #FFFFFF;
+  outline: none;
+}
+
+input::placeholder {
+  color: #434343;
+}
+
+textarea {
+  width: 100%;
+  background-color: #222232;
+  color: #999CAD;
+  border-radius: 14px;
+  padding: 18px;
+  border: 1px solid #222232;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+textarea:active {
+  border: 1px solid #FFFFFF;
+  outline: none;
+}
+
+textarea:focus {
+  border: 1px solid #FFFFFF;
+  outline: none;
+} 
+
+textarea::placeholder {
+  color: #434343;
+}
