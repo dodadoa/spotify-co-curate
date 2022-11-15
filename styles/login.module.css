@@ -1,0 +1,21 @@
+.loginWrapper {
+    padding: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.loginButton {
+    border: 0px;
+    padding: 20px;
+    border-radius: 16px;
+    width: 200px;
+    background-color: #EF5123;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 18px;
+}
+.loginButton:hover {
+    background-color: #cd471e;
+    color: #FFFFFF;
+}

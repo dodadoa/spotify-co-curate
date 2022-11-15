@@ -1,5 +1,5 @@
-
-import { signIn } from "next-auth/react";
+import { signIn } from "next-auth/react"
+import style from "../styles/login.module.css"
 
 export default function Login() {
   const handleLogin = () => {
@@ -7,8 +7,8 @@ export default function Login() {
   }
 
   return (
-    <div>
-     <button onClick={handleLogin}> LOGIN </button>
+    <div className={style.loginWrapper}>
+     <button className={style.loginButton} onClick={handleLogin}> LOGIN </button>
     </div>
   )
 }
