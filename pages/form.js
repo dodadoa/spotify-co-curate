@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"
 import Image from 'next/image'
-import { useForm } from "react-hook-form";
-import { createRecord, tables } from "../external/airtable";
-import { getSession } from "next-auth/react";
-import { fetchAlbum } from "../external/spotify";
-import style from "../styles/form.module.css";
+import { useForm } from "react-hook-form"
+import { createRecord, tables } from "../external/airtable"
+import { getSession } from "next-auth/react"
+import { fetchAlbum } from "../external/spotify"
+import { isAuthenticated } from "../utils/isAuthenticated"
+import style from "../styles/form.module.css"
 
 const Form = () => {
   const {
@@ -73,5 +74,20 @@ const Form = () => {
     </div>
   );
 };
+
+export const getServerSideProps = async (ctx) => {
+  const session = await getSession(ctx)
+
+  if (!(await isAuthenticated(session))) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    }
+  }
+
+  return { props: { hello: 'hello' } }
+}
 
 export default Form;
