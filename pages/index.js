@@ -1,14 +1,14 @@
 import { useEffect, useState, useCallback } from 'react'
-import { getSession } from "next-auth/react";
-import { isAuthenticated } from "../utils/isAuthenticated";
+import { getSession } from "next-auth/react"
+import { isAuthenticated } from "../utils/isAuthenticated"
 import { tables } from '../external/airtable'
 
 export default function Home({ hello }) {
 
   const [player, setPlayer] = useState(null)
   const [changing, setChanging] = useState(0)
-  const [isPaused, setPaused] = useState(false);
-  const [isActive, setActive] = useState(false);
+  const [isPaused, setPaused] = useState(false)
+  const [isActive, setActive] = useState(false)
   const [activeSession, setActiveSession] = useState({})
 
   const track = {
@@ -22,54 +22,54 @@ export default function Home({ hello }) {
       { name: "" }
     ]
   }
-  const [currentTrack, setTrack] = useState(track);
+  const [currentTrack, setTrack] = useState(track)
 
   const fetchSession = async () => {
     const session = await getSession()
     setActiveSession(session)
     const accessToken = session.user.accessToken
 
-    const script = document.createElement("script");
-    script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;
+    const script = document.createElement("script")
+    script.src = "https://sdk.scdn.co/spotify-player.js"
+    script.async = true
 
-    document.body.appendChild(script);
+    document.body.appendChild(script)
 
     window.onSpotifyWebPlaybackSDKReady = () => {
 
       const player = new window.Spotify.Player({
         name: 'Imagining 1',
-        getOAuthToken: cb => { cb(accessToken); },
+        getOAuthToken: cb => { cb(accessToken) },
         volume: 0.5
-      });
+      })
 
-      setPlayer(player);
+      setPlayer(player)
 
       player.addListener('ready', ({ device_id }) => {
-        console.log('Ready with Device ID', device_id);
-      });
+        console.log('Ready with Device ID', device_id)
+      })
 
       player.addListener('not_ready', ({ device_id }) => {
-        console.log('Device ID has gone offline', device_id);
-      });
+        console.log('Device ID has gone offline', device_id)
+      })
 
       player.addListener('player_state_changed', (state => {
 
         if (!state) {
-          return;
+          return
         }
   
-        setTrack(state.track_window.current_track);
-        setPaused(state.paused);
+        setTrack(state.track_window.current_track)
+        setPaused(state.paused)
   
         player.getCurrentState().then(state => {
           (!state) ? setActive(false) : setActive(true)
-        });
+        })
   
-      }));
+      }))
 
-      player.connect();
-    };
+      player.connect()
+    }
   }
 
   const fetchTablesAndRandomOneSong = async () => {
@@ -91,7 +91,7 @@ export default function Home({ hello }) {
   }, [])
 
   useEffect(() => {
-    setTimeout(refresh, 5000);
+    setTimeout(refresh, 5000)
   }, [])
 
   const handleNext = () => {}
@@ -106,11 +106,11 @@ export default function Home({ hello }) {
       <button onClick={handleNext}> NEXT </button>
       <p>{JSON.stringify(currentTrack)}</p>
     </div>
-  );
+  )
 }
 
 export const getServerSideProps = async (ctx) => {
-  const session = await getSession(ctx);
+  const session = await getSession(ctx)
 
   if (!(await isAuthenticated(session))) {
     return {
@@ -118,8 +118,8 @@ export const getServerSideProps = async (ctx) => {
         destination: "/login",
         permanent: false,
       },
-    };
+    }
   }
 
-  return { props: { hello: 'hello' } };
-};
+  return { props: { hello: 'hello' } }
+}
