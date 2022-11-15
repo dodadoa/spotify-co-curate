@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from 'next/image'
 import { useForm } from "react-hook-form";
 import { createRecord, tables } from "../external/airtable";
@@ -13,6 +13,17 @@ const Form = () => {
     watch,
     formState: { errors },
   } = useForm();
+
+  const [disabledSubmit, setDisabledSubmit] = useState(true)
+  const watchingForm = watch()
+
+  useEffect(() => {
+    if (!!watchingForm.caption && !!watchingForm.name) {
+      setDisabledSubmit(false)
+    } else {
+      setDisabledSubmit(true)
+    }
+  }, [watchingForm])
 
   const onSubmit = async (data) => {
     try {
@@ -57,7 +68,7 @@ const Form = () => {
           <p>{errors.name && <span>This field is required!</span>}</p>
           
         </div>
-        <input class={style.submit} type="submit" value="submit"/>
+        <input class={disabledSubmit ? style.submitDisabled : style.submitActive} type="submit" value="submit" disabled={disabledSubmit}/>
       </form>
     </div>
   );

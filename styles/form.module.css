@@ -65,7 +65,9 @@
   color: #434343;
 }
 
-.submit {
+
+
+.submitDisabled {
   background-color: #323755;
   padding: 20px;
   color: #979797;
@@ -75,6 +77,18 @@
   width: 212px;
   font-size: 20px;
   float: right;
+}
+
+.submitActive {
+  padding: 20px;
+  border-radius: 16px;
+  outline: none;
+  border: none;
+  width: 212px;
+  font-size: 20px;
+  float: right;
+  background-color: #EF5123;
+  color: #FFFFFF;
 }
 
 .inputWrapper {
