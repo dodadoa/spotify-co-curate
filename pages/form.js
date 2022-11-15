@@ -40,20 +40,18 @@ const Form = () => {
   };
 
   return (
-    <div className="form-wrapper">
+    <div className={style.form}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-group">
-          <h1>Join Our Playlist</h1>
-          <input placeholder="Search for songs" onChange={(e) => search(e.target.value)} />
-
-          <textarea placeholder="Input caption about the song ..." {...register("caption", { required: true })} />
-          {errors.caption && <span>This field is required</span>}
-
-          <input placeholder="Input your name" {...register("name", { required: true })} />
-          {errors.name && <span>This field is required</span>}
-
-          <input type="submit" />
+        <div className={style.formBody}>
+          <h1 className={style.header}> Join Our Playlist </h1>
+          <input className={style.input} onChange={(e) => search(e.target.value)} placeholder="Search for songs" />
+          <textarea className={style.textarea} {...register("caption", { required: true })} placeholder="Input caption about the song ..."  />
+          <p>{errors.caption && <span>This field is required!</span>}</p>
+          <input className={style.input} {...register("name", { required: true })} placeholder="Input your name" />
+          <p>{errors.name && <span>This field is required!</span>}</p>
+          
         </div>
+        <input className={style.submit} type="submit" value="submit"/>
       </form>
     </div>
   );
