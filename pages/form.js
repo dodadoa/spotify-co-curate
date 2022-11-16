@@ -32,12 +32,18 @@ const Form = () => {
   }, [watchingForm, selectedTrack]);
 
   const onSubmit = async (data) => {
+    if (!selectedTrack && !selectedTrack.id) {
+      console.log("Error not has track")
+      return
+    }
+
     try {
       const fields = {
         caption: data.caption,
         source: "spotify",
         target: "any",
         user: data.name,
+        songId: selectedTrack.id
       };
       const result = await createRecord({ fields });
       console.log(result);
@@ -106,8 +112,8 @@ const Form = () => {
                     <div key={track.id} className={style.track} onClick={(e) => {
                         e.preventDefault()
                         setSelectedTrack(track)
-                        setShowSearchResults(false)
                         setSearchValue("")
+                        setShowSearchResults(false)
                       }}>
                       <p><b>{track.name}</b></p>
                       <p>{track.artist} | {track.album}{" "}</p>
