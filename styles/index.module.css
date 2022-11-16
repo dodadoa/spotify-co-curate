@@ -14,15 +14,18 @@
 .textDescriptionBox {
   position: absolute;
   width: 50vw;
-  height: 25vh;
+  height: 20vh;
   background-color: rgba(0, 0, 0, 0.463);
   top: calc(50% + 10vh);
   left: calc(50% - 25vw);
   padding: 10px;
   padding-left: 20px;
+  z-index: 1;
+  border-radius: 5px;
 }
 
 .textDescription {
   font-size: 15px;
   font-weight: 400;
+  z-index: 2;
 }

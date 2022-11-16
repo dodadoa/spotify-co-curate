@@ -3,10 +3,12 @@ import { getSession } from "next-auth/react"
 import { isAuthenticated } from "../utils/isAuthenticated"
 import { tables } from '../external/airtable'
 import style from "../styles/index.module.css";
+import { addSongToQueue } from '../external/spotify'
+import { randomCountableNumber } from '../utils/random'
 
 //                    1s  * 60 = minute
 //                          1m * 4 = 4 minute
-const FOUR_MINUTES = 1000 * 60 * 4
+const THREE_MINUTES = 1000 * 60 * 3
 
 export default function Home({ hello }) {
 
@@ -85,15 +87,23 @@ export default function Home({ hello }) {
       const tableData = await tables()
       const { records } = tableData.data
       if (!records) {
-        console.log('Error')
+        console.log('Error, no Records')
         return
       }
       const recordsLength = records.length
-      const randomNum = Math.floor(Math.random() * recordsLength)
+      const randomNum = randomCountableNumber(recordsLength)
       const pickedRecord = records[randomNum]
       console.log(pickedRecord)
-
       setRandomRecord(pickedRecord)
+
+      if (!activeSession) {
+        console.log('Error, no active session')
+        return
+      }
+
+      const result = await addSongToQueue(activeSession.user.accessToken, pickedRecord.fields.songId)
+      console.log('Added song to queue!', result)
+
     } catch (error) {
       console.log(error)
     }
@@ -101,7 +111,7 @@ export default function Home({ hello }) {
 
   const refresh = async () => {
     await fetchTablesAndRandomOneSong()
-    setTimeout(refresh, FOUR_MINUTES)
+    setTimeout(refresh, THREE_MINUTES)
   }
 
   useEffect(() => {
@@ -125,11 +135,13 @@ export default function Home({ hello }) {
       </video>
 
       <div className={style.textDescriptionBox}>
-        <p className={style.textDescription}>Song Name: {currentTrack.name}</p>
-        <p className={style.textDescription}>Artist: {currentTrack.artists.map((artist) => `${artist.name} `)}</p>
-        <p className={style.textDescription}>Caption: {randomRecord.fields.caption}</p>
-        <p className={style.textDescription}>Name: {randomRecord.fields.user}</p>
+        <div className={style.textDescription}>
+          <p>Song Name: {currentTrack.name}</p>
+          <p>Artist: {currentTrack.artists.map((artist) => `${artist.name} `)}</p>
+          <p>Suggested by: {randomRecord.fields.user}</p>
+        </div>
       </div>
+
       {/* <button onClick={() => {
         player.togglePlay()
         player.activateElement()
