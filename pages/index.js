@@ -17,7 +17,7 @@ export default function Home({ hello }) {
   const [isPaused, setPaused] = useState(false)
   const [isActive, setActive] = useState(false)
   const [activeSession, setActiveSession] = useState({})
-  const [randomRecord, setRandomRecord] = useState({ fields: { caption: '', user: '' }})
+  const [recordSongDetail, setRecordSongDetail] = useState({ fields: { caption: '', user: '' }})
 
   const videoRef = useRef();
 
@@ -74,7 +74,7 @@ export default function Home({ hello }) {
 
         getRecord(state.track_window.current_track.id)
           .then((result) => {
-            setRandomRecord(result)
+            setRecordSongDetail(result)
           })
           .catch((err) => {
             console.log(err)
@@ -147,7 +147,7 @@ export default function Home({ hello }) {
         <div className={style.textDescription}>
           <p>Song Name: {currentTrack.name}</p>
           <p>Artist: {currentTrack.artists.map((artist) => `${artist.name} `)}</p>
-          <p>Suggested by: {randomRecord.fields.user}</p>
+          {recordSongDetail && <p>Suggested by: {recordSongDetail.fields.user}</p>}
         </div>
       </div>
 
