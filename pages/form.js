@@ -100,7 +100,7 @@ const Form = () => {
               <div className={style.searchResult}>
                 {searchResults.map((track) => {
                   return (
-                    <div className={style.track}>
+                    <div key={track.id} className={style.track}>
                       <p>{track.name}</p>
                       <br />
                       <p>
@@ -138,7 +138,7 @@ const Form = () => {
           <p>{errors.name && <span>This field is required!</span>}</p>
         </div>
         <input
-          class={disabledSubmit ? style.submitDisabled : style.submitActive}
+          className={disabledSubmit ? style.submitDisabled : style.submitActive}
           type="submit"
           value="submit"
           disabled={disabledSubmit}
