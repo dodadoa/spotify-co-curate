@@ -9,9 +9,9 @@ import style from "../styles/form.module.css";
 
 const Form = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [searchValue, setSearchValue] = useState("")
+  const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedTrack, setSelectedTrack] = useState({})
+  const [selectedTrack, setSelectedTrack] = useState({});
 
   const {
     register,
@@ -33,8 +33,8 @@ const Form = () => {
 
   const onSubmit = async (data) => {
     if (!selectedTrack && !selectedTrack.id) {
-      console.log("Error not has track")
-      return
+      console.log("Error not has track");
+      return;
     }
 
     try {
@@ -43,7 +43,7 @@ const Form = () => {
         source: "spotify",
         target: "any",
         user: data.name,
-        songId: selectedTrack.id
+        songId: selectedTrack.id,
       };
       const result = await createRecord({ fields });
       console.log(result);
@@ -53,7 +53,7 @@ const Form = () => {
   };
 
   const search = async (text) => {
-    setSearchValue(text)
+    setSearchValue(text);
     if (text.length > 0) {
       try {
         const session = await getSession();
@@ -96,6 +96,7 @@ const Form = () => {
     } else {
       setSearchResults([]);
       setShowSearchResults(false);
+      setSelectedTrack({});
     }
   };
 
@@ -109,35 +110,80 @@ const Form = () => {
               <div className={style.searchResult}>
                 {searchResults.map((track) => {
                   return (
-                    <div key={track.id} className={style.track} onClick={(e) => {
-                        e.preventDefault()
-                        setSelectedTrack(track)
-                        setSearchValue("")
-                        setShowSearchResults(false)
-                      }}>
-                      <p><b>{track.name}</b></p>
-                      <p>{track.artist} | {track.album}{" "}</p>
+                    <div
+                      key={track.id}
+                      className={style.track}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setSelectedTrack(track);
+                        setSearchValue("");
+                        setShowSearchResults(false);
+                      }}
+                    >
+                      <p>
+                        <b>{track.name}</b>
+                      </p>
+                      <p>
+                        {track.artist} | {track.album}{" "}
+                      </p>
                     </div>
                   );
                 })}
               </div>
             ) : null}
-            <div className={style.searchInput}>
-              <input
-                className={style.input}
-                onChange={(e) => search(e.target.value)}
-                onFocus={(e) => search(e.target.value)}
-                placeholder="Search for songs"
-                value={searchValue}
-              />
-              <div className={style.searchIcon}>
-                <Image width={20} height={20} src="/magnify.svg" alt="search" />
+            {Object.keys(selectedTrack).length === 0 ? (
+              <div className={style.searchInput}>
+                <input
+                  className={style.input}
+                  onChange={(e) => search(e.target.value)}
+                  onFocus={(e) => search(e.target.value)}
+                  placeholder="Search for songs"
+                  value={searchValue}
+                />
+                <div className={style.searchIcon}>
+                  <Image
+                    width={20}
+                    height={20}
+                    src="/magnify.svg"
+                    alt="search"
+                  />
+                </div>
+              </div>
+            ) : null}
+          </span>
+
+          {Object.keys(selectedTrack).length !== 0 ? (
+            <div className={style.selectedTrack}>
+              <div>
+                <p>
+                  <b>{selectedTrack.name}</b>
+                </p>
+                <p>
+                  {selectedTrack.artist} &nbsp; | &nbsp;
+                  {selectedTrack.album}{" "}
+                </p>
+              </div>
+              <div
+                className={style.removeBtn}
+                onClick={(e) => {
+                  e.preventDefault;
+                  setSelectedTrack({});
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault;
+                  setSelectedTrack({});
+                }}
+              >
+                <picture>
+                  <img
+                    className={style.removeIcon}
+                    src="/remove.svg"
+                    alt="remove"
+                  />
+                </picture>
               </div>
             </div>
-          </span>
-          <div>
-            <p>{selectedTrack.name}</p>
-          </div>
+          ) : null}
           <textarea
             className={style.textarea}
             {...register("caption", { required: true })}
@@ -151,6 +197,7 @@ const Form = () => {
           />
           <p>{errors.name && <span>This field is required!</span>}</p>
         </div>
+
         <input
           className={disabledSubmit ? style.submitDisabled : style.submitActive}
           type="submit"

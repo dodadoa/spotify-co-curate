@@ -5,11 +5,10 @@
 .formBody {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
 }
 
 .header {
-  font-family: 'Helvetica';
+  font-family: "Helvetica";
   font-weight: 600;
   font-size: 35px;
 }
@@ -17,7 +16,7 @@
 .input {
   width: 100%;
   background-color: #222232;
-  color: #999CAD;
+  color: #999cad;
   border-radius: 14px;
   padding: 18px;
   border: 1px solid #222232;
@@ -26,12 +25,12 @@
 }
 
 .input:active {
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   outline: none;
 }
 
 .input:focus {
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   outline: none;
 }
 
@@ -42,7 +41,7 @@
 .textarea {
   width: 100%;
   background-color: #222232;
-  color: #999CAD;
+  color: #999cad;
   border-radius: 14px;
   padding: 18px;
   border: 1px solid #222232;
@@ -52,19 +51,18 @@
 }
 
 .textarea:active {
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   outline: none;
 }
 
 .textarea:focus {
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   outline: none;
-} 
+}
 
 .textarea::placeholder {
   color: #434343;
 }
-
 
 .submitDisabled {
   background-color: #323755;
@@ -73,7 +71,7 @@
   border-radius: 16px;
   outline: none;
   border: none;
-  width: 212px;
+  width: 50vw;
   font-size: 20px;
   float: right;
 }
@@ -83,11 +81,11 @@
   border-radius: 16px;
   outline: none;
   border: none;
-  width: 212px;
+  width: 50vw;
   font-size: 20px;
+  background-color: #ef5123;
+  color: #ffffff;
   float: right;
-  background-color: #EF5123;
-  color: #FFFFFF;
 }
 
 .inputWrapper {
@@ -128,7 +126,7 @@
   padding-top: 10px;
   padding-bottom: 10px;
   font-size: 14px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 .track:hover {
   background-color: #33335f;
@@ -136,4 +134,27 @@
 
 .track p {
   margin: 0;
+}
+
+.removeBtn {
+  position: relative;
+  padding: 18px 0 18px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.removeIcon {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.selectedTrack {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 18px;
+  border-radius: 14px;
+  background-color: #222232;
+  width: 100%;
+  height: fit-content;
 }
