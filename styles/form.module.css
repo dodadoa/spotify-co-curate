@@ -106,11 +106,10 @@
   height: 30vh;
   position: absolute;
   margin-top: 20px;
-  background-color: rgba(34, 34, 50, 0.3);
   border-radius: 14px;
   padding-top: 40px;
   overflow: scroll;
-  border: 1px solid #FFFFFF;
+  background-color: #222232;
 }
 
 .searchInput {
@@ -124,6 +123,15 @@
   height: fit-content;
   margin: 2vh 0;
   padding-left: 18px;
+  cursor: pointer;
+  background-color: #222232;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  color: #FFFFFF;
+}
+.track:hover {
+  background-color: #33335f;
 }
 
 .track p {

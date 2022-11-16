@@ -8,8 +8,10 @@ import { isAuthenticated } from "../utils/isAuthenticated";
 import style from "../styles/form.module.css";
 
 const Form = () => {
-  const [searchResultDiv, setSearchResultDiv] = useState(false);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [searchValue, setSearchValue] = useState("")
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedTrack, setSelectedTrack] = useState({})
 
   const {
     register,
@@ -45,6 +47,7 @@ const Form = () => {
   };
 
   const search = async (text) => {
+    setSearchValue(text)
     if (text.length > 0) {
       try {
         const session = await getSession();
@@ -67,7 +70,7 @@ const Form = () => {
           if (!jsonResponse.tracks) {
             return [];
           }
-          setSearchResultDiv(true);
+          setShowSearchResults(true);
           const track = jsonResponse.tracks.items.map((track) => ({
             id: track.id,
             name: track.name,
@@ -86,7 +89,7 @@ const Form = () => {
       }
     } else {
       setSearchResults([]);
-      setSearchResultDiv(false);
+      setShowSearchResults(false);
     }
   };
 
@@ -96,34 +99,39 @@ const Form = () => {
         <div className={style.formBody}>
           <h1 className={style.header}> Join Our Playlist </h1>
           <span className={style.inputWrapper}>
-            {searchResultDiv ? (
+            {showSearchResults ? (
               <div className={style.searchResult}>
                 {searchResults.map((track) => {
                   return (
-                    <div key={track.id} className={style.track}>
-                      <p>{track.name}</p>
-                      <br />
-                      <p>
-                        {track.artist} | {track.album}{" "}
-                      </p>
+                    <div key={track.id} className={style.track} onClick={(e) => {
+                        e.preventDefault()
+                        setSelectedTrack(track)
+                        setShowSearchResults(false)
+                        setSearchValue("")
+                      }}>
+                      <p><b>{track.name}</b></p>
+                      <p>{track.artist} | {track.album}{" "}</p>
                     </div>
                   );
                 })}
               </div>
-            ) : (
-              <></>
-            )}
+            ) : null}
             <div className={style.searchInput}>
               <input
                 className={style.input}
                 onChange={(e) => search(e.target.value)}
+                onFocus={(e) => search(e.target.value)}
                 placeholder="Search for songs"
+                value={searchValue}
               />
               <div className={style.searchIcon}>
                 <Image width={20} height={20} src="/magnify.svg" alt="search" />
               </div>
             </div>
           </span>
+          <div>
+            <p>{selectedTrack.name}</p>
+          </div>
           <textarea
             className={style.textarea}
             {...register("caption", { required: true })}
