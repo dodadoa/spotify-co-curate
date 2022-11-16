@@ -1,7 +1,8 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { getSession } from "next-auth/react"
 import { isAuthenticated } from "../utils/isAuthenticated"
 import { tables } from '../external/airtable'
+import style from "../styles/index.module.css";
 
 //                    1s  * 60 = minute
 //                          1m * 4 = 4 minute
@@ -14,6 +15,9 @@ export default function Home({ hello }) {
   const [isPaused, setPaused] = useState(false)
   const [isActive, setActive] = useState(false)
   const [activeSession, setActiveSession] = useState({})
+  const [randomRecord, setRandomRecord] = useState({ fields: { caption: ''}})
+
+  const videoRef = useRef();
 
   const track = {
     name: "",
@@ -79,8 +83,17 @@ export default function Home({ hello }) {
   const fetchTablesAndRandomOneSong = async () => {
     try {
       const tableData = await tables()
-      const fields = tableData.data.fields
-      console.log(fields)
+      const { records } = tableData.data
+      if (!records) {
+        console.log('Error')
+        return
+      }
+      const recordsLength = records.length
+      const randomNum = Math.floor(Math.random() * recordsLength)
+      const pickedRecord = records[randomNum]
+      console.log(pickedRecord)
+
+      setRandomRecord(pickedRecord)
     } catch (error) {
       console.log(error)
     }
@@ -96,20 +109,31 @@ export default function Home({ hello }) {
   }, [])
 
   useEffect(() => {
-    setTimeout(refresh, FOUR_MINUTES)
+    setTimeout(refresh, 100)
   }, [])
 
-  const handleNext = () => {}
+  useEffect(() => {
+    setTimeout(()=>{
+      videoRef.current.play()
+    },1000)
+  }, [])
 
   return (
-    <div>
-      {hello}
-      <button onClick={() => {
+    <div className={style.main}>
+      <video loop ref={videoRef} muted className={style.video}>
+        <source src="/glitch_bg_1.mp4" type="video/mp4"/>
+      </video>
+
+      <div className={style.textDescriptionBox}>
+        <p>Song Name: {currentTrack.name}</p>
+        <p>Artist: {currentTrack.artists.map((artist) => `${artist.name} `)}</p>
+        <p>Caption: {randomRecord.fields.caption}</p>
+      </div>
+      {/* <button onClick={() => {
         player.togglePlay()
         player.activateElement()
       }}> PLAY </button>
-      <button onClick={handleNext}> NEXT </button>
-      <p>{JSON.stringify(currentTrack)}</p>
+      <button onClick={handleNext}> NEXT </button> */}
     </div>
   )
 }
