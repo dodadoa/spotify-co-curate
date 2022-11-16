@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { createRecord, tables } from "../external/airtable";
 import { getSession } from "next-auth/react";
-import { fetchAlbum } from "../external/spotify";
 import { isAuthenticated } from "../utils/isAuthenticated";
 import style from "../styles/form.module.css";
 
@@ -58,8 +57,6 @@ const Form = () => {
       try {
         const session = await getSession();
         const accessToken = session.user.accessToken;
-        const result = await fetchAlbum(accessToken);
-        console.log(result);
 
         const response = await fetch(
           `https://api.spotify.com/v1/search?type=track&q=${text}`,
