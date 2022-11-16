@@ -15,7 +15,7 @@ export default function Home({ hello }) {
   const [isPaused, setPaused] = useState(false)
   const [isActive, setActive] = useState(false)
   const [activeSession, setActiveSession] = useState({})
-  const [randomRecord, setRandomRecord] = useState({ fields: { caption: ''}})
+  const [randomRecord, setRandomRecord] = useState({ fields: { caption: '', user: '' }})
 
   const videoRef = useRef();
 
@@ -125,9 +125,10 @@ export default function Home({ hello }) {
       </video>
 
       <div className={style.textDescriptionBox}>
-        <p>Song Name: {currentTrack.name}</p>
-        <p>Artist: {currentTrack.artists.map((artist) => `${artist.name} `)}</p>
-        <p>Caption: {randomRecord.fields.caption}</p>
+        <p className={style.textDescription}>Song Name: {currentTrack.name}</p>
+        <p className={style.textDescription}>Artist: {currentTrack.artists.map((artist) => `${artist.name} `)}</p>
+        <p className={style.textDescription}>Caption: {randomRecord.fields.caption}</p>
+        <p className={style.textDescription}>Name: {randomRecord.fields.user}</p>
       </div>
       {/* <button onClick={() => {
         player.togglePlay()
