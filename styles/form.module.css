@@ -117,7 +117,8 @@
 
 .track {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   height: fit-content;
   margin: 2vh 0;
   padding-left: 18px;
@@ -136,12 +137,25 @@
   margin: 0;
 }
 
+.trackDetail {
+  display: flex;
+  flex-direction: column;
+}
+
+.addBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 18px;
+}
+
 .removeBtn {
   position: relative;
   padding: 18px 0 18px 12px;
   display: flex;
   align-items: center;
 }
+
 
 .removeIcon {
   height: 40px;

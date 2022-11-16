@@ -117,12 +117,23 @@ const Form = () => {
                         setShowSearchResults(false);
                       }}
                     >
-                      <p>
-                        <b>{track.name}</b>
-                      </p>
-                      <p>
-                        {track.artist} | {track.album}{" "}
-                      </p>
+                      <div className={style.trackDetail}>
+                        <p>
+                          <b>{track.name}</b>
+                        </p>
+                        <p>
+                          {track.artist} | {track.album}{" "}
+                        </p>
+                      </div>
+                      <div className={style.addBtn}>
+                        <picture>
+                          <img
+                            className={style.removeIcon}
+                            src="/add.svg"
+                            alt="add"
+                          />
+                        </picture>
+                      </div>
                     </div>
                   );
                 })}
