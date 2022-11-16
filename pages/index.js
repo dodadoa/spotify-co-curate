@@ -3,6 +3,10 @@ import { getSession } from "next-auth/react"
 import { isAuthenticated } from "../utils/isAuthenticated"
 import { tables } from '../external/airtable'
 
+//                    1s  * 60 = minute
+//                          1m * 4 = 4 minute
+const FOUR_MINUTES = 1000 * 60 * 4
+
 export default function Home({ hello }) {
 
   const [player, setPlayer] = useState(null)
@@ -74,8 +78,9 @@ export default function Home({ hello }) {
 
   const fetchTablesAndRandomOneSong = async () => {
     try {
-      const result = await tables()
-      console.log(result)
+      const tableData = await tables()
+      const fields = tableData.data.fields
+      console.log(fields)
     } catch (error) {
       console.log(error)
     }
@@ -83,7 +88,7 @@ export default function Home({ hello }) {
 
   const refresh = async () => {
     await fetchTablesAndRandomOneSong()
-    setTimeout(refresh, 5000)
+    setTimeout(refresh, FOUR_MINUTES)
   }
 
   useEffect(() => {
@@ -91,7 +96,7 @@ export default function Home({ hello }) {
   }, [])
 
   useEffect(() => {
-    setTimeout(refresh, 5000)
+    setTimeout(refresh, FOUR_MINUTES)
   }, [])
 
   const handleNext = () => {}
