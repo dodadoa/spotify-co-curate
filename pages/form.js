@@ -24,12 +24,12 @@ const Form = () => {
   const watchingForm = watch();
 
   useEffect(() => {
-    if (!!watchingForm.caption && !!watchingForm.name) {
+    if (!!watchingForm.caption && !!watchingForm.name && !!selectedTrack) {
       setDisabledSubmit(false);
     } else {
       setDisabledSubmit(true);
     }
-  }, [watchingForm]);
+  }, [watchingForm, selectedTrack]);
 
   const onSubmit = async (data) => {
     try {
