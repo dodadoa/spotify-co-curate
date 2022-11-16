@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { getSession } from "next-auth/react"
 import { isAuthenticated } from "../utils/isAuthenticated"
-import { tables } from '../external/airtable'
+import { tables, getRecord } from '../external/airtable'
 import style from "../styles/index.module.css";
 import { addSongToQueue } from '../external/spotify'
 import { randomCountableNumber } from '../utils/random'
@@ -36,6 +36,7 @@ export default function Home({ hello }) {
 
   const fetchSession = async () => {
     const session = await getSession()
+
     setActiveSession(session)
     const accessToken = session.user.accessToken
 
@@ -70,6 +71,15 @@ export default function Home({ hello }) {
         }
   
         setTrack(state.track_window.current_track)
+
+        getRecord(state.track_window.current_track.id)
+          .then((result) => {
+            setRandomRecord(result)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+
         setPaused(state.paused)
   
         player.getCurrentState().then(state => {
@@ -94,9 +104,8 @@ export default function Home({ hello }) {
       const randomNum = randomCountableNumber(recordsLength)
       const pickedRecord = records[randomNum]
       console.log(pickedRecord)
-      setRandomRecord(pickedRecord)
 
-      if (!activeSession) {
+      if (!activeSession && !activeSession.user && !activeSession.user.accessToken) {
         console.log('Error, no active session')
         return
       }
