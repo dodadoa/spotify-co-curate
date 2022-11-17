@@ -15,18 +15,24 @@ export const tables = async () => {
 
 export const getRecord = async (songId) => {
   try {
-  const { data } = await axios.get(
-    `https://api.airtable.com/v0/appqFEOQnCcbDegfP/Table%201`,
-    config
-  )
-  if (!data) {
-    throw new Error('data not found')
-  }
-  const record = data.records.find((record) => record.fields.songId === songId)
-  console.log(record)
-  return record
+    const { data } = await axios.get(
+      `https://api.airtable.com/v0/appqFEOQnCcbDegfP/Table%201`,
+      config
+    )
+
+    if (!data) {
+      throw new Error('data not found')
+    }
+
+    const record = data.records.find((record) => record.fields.songId === songId)
+    if (!record) {
+      throw new Error('data not found')
+    }
+
+    console.log('Records:', record)
+    return record
   } catch (error) {
-    console.log(error)
+    console.error(error)
     throw error
   }
 }

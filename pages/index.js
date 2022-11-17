@@ -96,27 +96,23 @@ export default function Home({ hello }) {
         console.log("Error, no Records");
         return;
       }
-      const recordsLength = records.length;
-      const randomNum = randomCountableNumber(recordsLength);
-      const pickedRecord = records[randomNum];
-      console.log(pickedRecord);
+      const recordsLength = records.length
+      const randomNum = randomCountableNumber(recordsLength)
+      const pickedRecord = records[randomNum]
+      console.log(pickedRecord)
 
-      if (
-        !activeSession &&
-        !activeSession.user &&
-        !activeSession.user.accessToken
-      ) {
-        console.log("Error, no active session");
-        return;
+      if (pickedRecord.fields.source === 'spotify') {
+        if (!activeSession && !activeSession.user && !activeSession.user.accessToken) {
+          console.log('Error, no active session')
+          return
+        }
+  
+        const result = await addSongToQueue(activeSession.user.accessToken, pickedRecord.fields.songId)
+        console.log('Added song to queue!', result)
       }
 
-      const result = await addSongToQueue(
-        activeSession.user.accessToken,
-        pickedRecord.fields.songId
-      );
-      console.log("Added song to queue!", result);
     } catch (error) {
-      console.log(error);
+      console.error('fetchTablesAndRandomOneSong', error)
     }
   };
 
