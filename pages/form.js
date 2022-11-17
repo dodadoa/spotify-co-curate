@@ -46,6 +46,12 @@ const Form = () => {
       };
       const result = await createRecord({ fields });
       console.log(result);
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
     } catch (error) {
       console.log(error);
     }
