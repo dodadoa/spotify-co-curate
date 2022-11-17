@@ -144,9 +144,13 @@ export default function Home({ hello }) {
       <div className={style.trackImgWrapper}>
         <picture>
           {trackImage ? (
-            <img className={style.trackImg} src={trackImage} alt="trackImage" />
+            <picture>
+              <img className={style.trackImg} src={trackImage} alt="trackImage" />
+            </picture>
           ) : (
-            <img className={style.trackImg} src="/done.svg" alt="trackImage" />
+            <picture>
+              <img className={style.trackImg} src="/done.svg" alt="trackImage" />
+            </picture>
           )}
         </picture>
       </div>
@@ -162,10 +166,7 @@ export default function Home({ hello }) {
         </div>
       </div>
       <div className={style.captionMarquee}>
-        {/* <p className={style.captionInner}>{recordSongDetail.fields.caption}</p> */}
-        <span className={style.captionInner}>
-          -----------caption caption caption caption xx ooo aaa-----------
-        </span>
+        <p className={style.captionInner}>--------{recordSongDetail.fields.caption}--------</p>
       </div>
       {/* <button onClick={() => {
         player.togglePlay()

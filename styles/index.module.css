@@ -50,8 +50,11 @@
   overflow: hidden;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  color: #ffffff;
+  color: #2b00ff;
+  -webkit-text-stroke: 1px white;
   white-space: nowrap;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .captionInner {
