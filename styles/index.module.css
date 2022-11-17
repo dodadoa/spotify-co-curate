@@ -40,6 +40,9 @@
   font-size: 38px;
   font-weight: 600;
   margin: 1vh 0;
+  color: seashell;
+  -webkit-text-stroke: 1px blue;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 
@@ -53,8 +56,6 @@
   color: #2b00ff;
   -webkit-text-stroke: 1px white;
   white-space: nowrap;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 .captionInner {
@@ -66,7 +67,7 @@
   line-height: 120px;
   -moz-animation: scroll-left 20s linear infinite;
   -webkit-animation: scroll-left 20s linear infinite;
-  animation: scroll-left 40s linear infinite;
+  animation: scroll-left 110s linear infinite;
 }
 
 @-moz-keyframes scroll-left {
