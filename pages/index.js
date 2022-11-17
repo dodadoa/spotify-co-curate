@@ -98,20 +98,22 @@ export default function Home({ hello }) {
         console.log("Error, no Records");
         return;
       }
-      const recordsLength = records.length
-      const randomNum = randomCountableNumber(recordsLength)
-      const pickedRecord = records[randomNum]
-      console.log(pickedRecord)
+      const recordsLength = records.length;
+      const randomNum = randomCountableNumber(recordsLength);
+      const pickedRecord = records[randomNum];
+      console.log(pickedRecord);
 
-      if (pickedRecord.fields.source === 'spotify') {
-        const session = await getSession()
-  
-        const result = await addSongToQueue(session.user.accessToken, pickedRecord.fields.songId)
-        console.log('Added song to queue!', result)
+      if (pickedRecord.fields.source === "spotify") {
+        const session = await getSession();
+
+        const result = await addSongToQueue(
+          session.user.accessToken,
+          pickedRecord.fields.songId
+        );
+        console.log("Added song to queue!", result);
       }
-
     } catch (error) {
-      console.error('fetchTablesAndRandomOneSong', error)
+      console.error("fetchTablesAndRandomOneSong", error);
     }
   };
 
@@ -134,7 +136,7 @@ export default function Home({ hello }) {
     }, 1000);
   }, []);
 
-  console.log(trackImage);
+  console.log(currentTrack);
 
   return (
     <div className={style.main}>
