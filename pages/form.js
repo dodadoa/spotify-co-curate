@@ -6,12 +6,16 @@ import { getSession } from "next-auth/react";
 import { isAuthenticated } from "../utils/isAuthenticated";
 import { useRouter } from "next/router";
 import style from "../styles/form.module.css";
+import ReactLoading from 'react-loading';
+
 
 const Form = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState({});
+  const [submitTextButton, setSubmitTextButton] = useState('Submit')
+  const [loading, setLoading] = useState(false)
 
   const router = useRouter();
 
@@ -20,7 +24,7 @@ const Form = () => {
     handleSubmit,
     reset,
     watch,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm();
 
   const [disabledSubmit, setDisabledSubmit] = useState(true);
@@ -35,12 +39,15 @@ const Form = () => {
   }, [watchingForm, selectedTrack]);
 
   const onSubmit = async (data) => {
+    setLoading(true)
     if (!selectedTrack && !selectedTrack.id) {
       console.log("Error not has track");
       return;
     }
 
     try {
+      setDisabledSubmit(true)
+      setSubmitTextButton('Loading')
       const fields = {
         caption: data.caption,
         source: "spotify",
@@ -57,6 +64,7 @@ const Form = () => {
       });
       setSelectedTrack({});
       await router.push("/done");
+      setLoading(false)
       return {
         redirect: {
           destination: "/login",
@@ -64,6 +72,7 @@ const Form = () => {
         },
       };
     } catch (error) {
+      setLoading(false)
       console.log(error);
     }
   };
@@ -113,6 +122,14 @@ const Form = () => {
       setSelectedTrack({});
     }
   };
+
+  if (loading) {
+    return (
+      <div className={style.loadingWrapper}>
+        <ReactLoading type={"spinningBubbles"} color={'#fff'} height={100} width={100} />
+      </div>
+    )
+  }
 
   return (
     <div className={style.form}>
@@ -227,7 +244,7 @@ const Form = () => {
         <input
           className={disabledSubmit ? style.submitDisabled : style.submitActive}
           type="submit"
-          value="submit"
+          value={submitTextButton}
           disabled={disabledSubmit}
         />
       </form>

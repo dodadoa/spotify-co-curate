@@ -8,7 +8,7 @@ const Done = () => {
   useEffect(() => {
     let timeOut = setTimeout(() => {
       router.push("/form");
-    }, 5000);
+    }, 2000);
 
     return () => (timeOut ? clearTimeout(timeOut) : null);
   }, []);
