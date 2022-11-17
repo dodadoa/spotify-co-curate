@@ -19,6 +19,7 @@ export default function Home({ hello }) {
   const [recordSongDetail, setRecordSongDetail] = useState({
     fields: { caption: "", user: "" },
   });
+  const [trackImage, setTrackImage] = useState("");
 
   const videoRef = useRef();
 
@@ -68,6 +69,7 @@ export default function Home({ hello }) {
         }
 
         setTrack(state.track_window.current_track);
+        setTrackImage(state.track_window.current_track.album.images[2].url);
 
         getRecord(state.track_window.current_track.id)
           .then((result) => {
@@ -132,12 +134,22 @@ export default function Home({ hello }) {
     }, 1000);
   }, []);
 
+  console.log(trackImage);
+
   return (
     <div className={style.main}>
       <video loop ref={videoRef} muted className={style.video}>
         <source src="/glitch_bg_1.mp4" type="video/mp4" />
       </video>
-
+      <div className={style.trackImgWrapper}>
+        <picture>
+          {trackImage ? (
+            <img className={style.trackImg} src={trackImage} alt="trackImage" />
+          ) : (
+            <img className={style.trackImg} src="/done.svg" alt="trackImage" />
+          )}
+        </picture>
+      </div>
       <div className={style.textDescriptionBox}>
         <div className={style.textDescription}>
           <p>Song Name: {currentTrack.name}</p>
@@ -150,7 +162,10 @@ export default function Home({ hello }) {
         </div>
       </div>
       <div className={style.captionMarquee}>
-        <p className={style.captionInner}>{recordSongDetail.fields.caption}</p>
+        {/* <p className={style.captionInner}>{recordSongDetail.fields.caption}</p> */}
+        <span className={style.captionInner}>
+          -----------caption caption caption caption xx ooo aaa-----------
+        </span>
       </div>
       {/* <button onClick={() => {
         player.togglePlay()

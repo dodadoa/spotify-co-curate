@@ -1,58 +1,69 @@
 .main {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .video {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   object-fit: fill;
   z-index: 0;
   position: fixed;
 }
 
+.trackImgWrapper {
+  margin-bottom: 5vw;
+  z-index: 1;
+}
+
+.trackImg {
+  height: 30vh;
+  width: auto;
+  object-fit: contain;
+}
+
 .textDescriptionBox {
-  position: absolute;
   width: 50vw;
-  height: 20vh;
+  height: fit-content;
   background-color: rgba(0, 0, 0, 0.463);
-  top: calc(50% + 10vh);
-  left: calc(50% - 25vw);
   padding: 10px;
   padding-left: 20px;
   z-index: 1;
   border-radius: 5px;
 }
 
-.textDescription {
-  font-size: 15px;
-  font-weight: 400;
-  z-index: 2;
+.textDescription P {
+  font-size: 38px;
+  font-weight: 600;
+  margin: 1vh 0;
 }
 
+
 .captionMarquee {
-  height: 50px;
+  height: 120px;
   width: 100vw;
-  overflow: hidden;
   position: absolute;
+  overflow: hidden;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   color: #ffffff;
+  white-space: nowrap;
 }
 
 .captionInner {
   position: absolute;
-  width: 100%;
-  height: 100%;
   margin: 0;
-  line-height: 50px;
-  text-align: center;
-  -moz-transform: translateX(100%);
-  -webkit-transform: translateX(100%);
-  transform: translateX(100%);
-  -moz-animation: scroll-left 2s linear infinite;
-  -webkit-animation: scroll-left 2s linear infinite;
-  animation: scroll-left 20s linear infinite;
+  font-size: 120px;
+  font-weight: 600;
+  text-align: left;
+  line-height: 120px;
+  -moz-animation: scroll-left 20s linear infinite;
+  -webkit-animation: scroll-left 20s linear infinite;
+  animation: scroll-left 40s linear infinite;
 }
 
 @-moz-keyframes scroll-left {
@@ -75,9 +86,9 @@
 
 @keyframes scroll-left {
   0% {
-    -moz-transform: translateX(100%);
-    -webkit-transform: translateX(100%);
-    transform: translateX(100%);
+    -moz-transform: translateX(0);
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
   }
   100% {
     -moz-transform: translateX(-100%);
