@@ -1,8 +1,7 @@
 import NextAuth from 'next-auth';
 import SpotifyProvider from 'next-auth/providers/spotify';
 
-const scope =
-  'streaming user-read-recently-played user-read-playback-state user-top-read user-modify-playback-state user-read-currently-playing user-follow-read playlist-read-private user-read-email user-read-private user-library-read playlist-read-collaborative';
+const scope = 'streaming user-read-playback-state user-modify-playback-state user-read-private user-read-currently-playing user-read-recently-played'
 
 export default NextAuth({
   providers: [
