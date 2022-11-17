@@ -8,7 +8,7 @@ import { randomCountableNumber } from "../utils/random";
 
 //                    1s  * 60 = minute
 //                          1m * 4 = 4 minute
-const THREE_MINUTES = 1000 * 60 * 3;
+const TWO_MINUTES = 1000 * 60 * 2;
 
 export default function Home({ hello }) {
   const [player, setPlayer] = useState(null);
@@ -115,7 +115,7 @@ export default function Home({ hello }) {
 
   const refresh = async () => {
     await fetchTablesAndRandomOneSong();
-    setTimeout(refresh, 10000);
+    setTimeout(refresh, TWO_MINUTES);
   };
 
   useEffect(() => {
