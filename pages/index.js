@@ -20,6 +20,7 @@ export default function Home({ hello }) {
     fields: { caption: "", user: "" },
   });
   const [trackImage, setTrackImage] = useState("");
+  const [trackQR, setTrackQR] = useState("");
 
   const videoRef = useRef();
 
@@ -70,6 +71,7 @@ export default function Home({ hello }) {
 
         setTrack(state.track_window.current_track);
         setTrackImage(state.track_window.current_track.album.images[2].url);
+        setTrackQR(state.track_window.current_track.uri);
 
         getRecord(state.track_window.current_track.id)
           .then((result) => {
@@ -143,16 +145,23 @@ export default function Home({ hello }) {
       <video loop ref={videoRef} muted className={style.video}>
         <source src="/glitch_bg_1.mp4" type="video/mp4" />
       </video>
+      {trackQR ? (
+        <div className={style.trackQrWrapper}>
+          <picture>
+            <img
+              className={style.trackQR}
+              src={`https://scannables.scdn.co/uri/plain/png/000000/white/640/${trackQR}`}
+              alt="Spotify QR"
+            />
+          </picture>
+        </div>
+      ) : null}
       <div className={style.trackImgWrapper}>
         <picture>
           {trackImage ? (
-            <picture>
-              <img className={style.trackImg} src={trackImage} alt="trackImage" />
-            </picture>
+            <img className={style.trackImg} src={trackImage} alt="trackImage" />
           ) : (
-            <picture>
-              <img className={style.trackImg} src="/done.svg" alt="trackImage" />
-            </picture>
+            <img className={style.trackImg} src="/done.svg" alt="trackImage" />
           )}
         </picture>
       </div>
@@ -168,7 +177,10 @@ export default function Home({ hello }) {
         </div>
       </div>
       <div className={style.captionMarquee}>
-        <p className={style.captionInner}>--------{recordSongDetail.fields.caption}--------</p>
+        {/* <p className={style.captionInner}>{recordSongDetail.fields.caption}</p> */}
+        <span className={style.captionInner}>
+          -----------caption caption caption caption xx ooo aaa-----------
+        </span>
       </div>
       {/* <button onClick={() => {
         player.togglePlay()

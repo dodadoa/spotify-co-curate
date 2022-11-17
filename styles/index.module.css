@@ -15,6 +15,17 @@
   position: fixed;
 }
 
+.trackQrWrapper {
+  margin-bottom: 3vw;
+  z-index: 1;
+}
+
+.trackQR {
+  height: 10vh;
+  width: auto;
+  object-fit: contain;
+}
+
 .trackImgWrapper {
   margin-bottom: 5vw;
   z-index: 1;
@@ -27,7 +38,8 @@
 }
 
 .textDescriptionBox {
-  width: 50vw;
+  min-width: 50vw;
+  width: fit-content;
   height: fit-content;
   background-color: rgba(0, 0, 0, 0.463);
   padding: 10px;
