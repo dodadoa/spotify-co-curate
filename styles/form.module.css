@@ -82,9 +82,13 @@
   border: none;
   width: 210px;
   font-size: 20px;
-  background-color: #ef5123;
+  background-color: #c03206;
   color: #ffffff;
   float: right;
+}
+
+.submitActive:active {
+  background-color:  #771c00;
 }
 
 .inputWrapper {

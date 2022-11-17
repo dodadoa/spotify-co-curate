@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { createRecord, tables } from "../external/airtable";
 import { getSession } from "next-auth/react";
 import { isAuthenticated } from "../utils/isAuthenticated";
+import { useRouter } from "next/router";
 import style from "../styles/form.module.css";
 
 const Form = () => {
@@ -12,9 +13,12 @@ const Form = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState({});
 
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
+    reset,
     watch,
     formState: { errors },
   } = useForm();
@@ -46,6 +50,13 @@ const Form = () => {
       };
       const result = await createRecord({ fields });
       console.log(result);
+      reset({
+        searchText: "",
+        caption: "",
+        name: "",
+      });
+      setSelectedTrack({});
+      await router.push("/done");
       return {
         redirect: {
           destination: "/login",
@@ -152,6 +163,7 @@ const Form = () => {
                   onChange={(e) => search(e.target.value)}
                   onFocus={(e) => search(e.target.value)}
                   placeholder="Search for songs"
+                  name={"searchText"}
                   value={searchValue}
                 />
                 <div className={style.searchIcon}>

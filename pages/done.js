@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import style from "../styles/done.module.css";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 const Done = () => {
   const router = useRouter();
