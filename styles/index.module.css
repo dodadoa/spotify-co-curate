@@ -59,7 +59,7 @@
 
 
 .captionMarquee {
-  height: 120px;
+  height: 100px;
   width: 100vw;
   position: absolute;
   overflow: hidden;
@@ -76,7 +76,7 @@
   font-size: 120px;
   font-weight: 600;
   text-align: left;
-  line-height: 120px;
+  line-height: 90px;
   -moz-animation: scroll-left 20s linear infinite;
   -webkit-animation: scroll-left 20s linear infinite;
   animation: scroll-left 55s linear infinite;

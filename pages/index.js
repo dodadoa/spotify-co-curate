@@ -157,13 +157,15 @@ export default function Home({ hello }) {
         </div>
       ) : null}
       <div className={style.trackImgWrapper}>
-        <picture>
-          {trackImage ? (
+        {trackImage ? (
+          <picture>
             <img className={style.trackImg} src={trackImage} alt="trackImage" />
-          ) : (
+          </picture>
+        ) : (
+          <picture>
             <img className={style.trackImg} src="/done.svg" alt="trackImage" />
-          )}
-        </picture>
+          </picture>
+        )}
       </div>
       <div className={style.textDescriptionBox}>
         <div className={style.textDescription}>
@@ -177,10 +179,7 @@ export default function Home({ hello }) {
         </div>
       </div>
       <div className={style.captionMarquee}>
-        {/* <p className={style.captionInner}>{recordSongDetail.fields.caption}</p> */}
-        <span className={style.captionInner}>
-          -----------caption caption caption caption xx ooo aaa-----------
-        </span>
+        <p className={style.captionInner}>-------{recordSongDetail.fields.caption}------</p>
       </div>
       {/* <button onClick={() => {
         player.togglePlay()
