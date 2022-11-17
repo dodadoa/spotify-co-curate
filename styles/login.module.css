@@ -1,21 +1,28 @@
 .loginWrapper {
-    padding: 30px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+
 }
 
 .loginButton {
-    border: 0px;
-    padding: 20px;
-    border-radius: 16px;
-    width: 200px;
-    background-color: #EF5123;
-    color: #FFFFFF;
-    cursor: pointer;
-    font-size: 18px;
+  border: 0px;
+  padding: 20px;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  background-color: #EF5123;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 16px;
 }
+
 .loginButton:hover {
-    background-color: #cd471e;
-    color: #FFFFFF;
+  background-color: #cd471e;
+  color: #FFFFFF;
+  border: 1px solid white;
 }
