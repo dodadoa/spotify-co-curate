@@ -102,12 +102,9 @@ export default function Home({ hello }) {
       console.log(pickedRecord)
 
       if (pickedRecord.fields.source === 'spotify') {
-        if (!activeSession && !activeSession.user && !activeSession.user.accessToken) {
-          console.log('Error, no active session')
-          return
-        }
+        const session = await getSession()
   
-        const result = await addSongToQueue(activeSession.user.accessToken, pickedRecord.fields.songId)
+        const result = await addSongToQueue(session.user.accessToken, pickedRecord.fields.songId)
         console.log('Added song to queue!', result)
       }
 
