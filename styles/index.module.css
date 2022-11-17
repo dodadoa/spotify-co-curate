@@ -67,7 +67,7 @@
   line-height: 120px;
   -moz-animation: scroll-left 20s linear infinite;
   -webkit-animation: scroll-left 20s linear infinite;
-  animation: scroll-left 110s linear infinite;
+  animation: scroll-left 55s linear infinite;
 }
 
 @-moz-keyframes scroll-left {
