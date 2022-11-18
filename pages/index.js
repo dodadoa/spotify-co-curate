@@ -138,10 +138,17 @@ export default function Home({ hello }) {
           localSongAudioRef.current = new Audio(pickedRecord.fields.localfile[0].url)
           await localSongAudioRef.current.play()
 
-          setTrack({ name: pickedRecord.fields.name, artists: [{ name: pickedRecord.fields.artist }] });
-          setTrackImage("/local.jpeg");
-          setTrackQR("");
-          setRecordSongDetail(pickedRecord);
+          await setTrack({ name: pickedRecord.fields.name, artists: [{ name: pickedRecord.fields.artist }] });
+          await setTrackImage("/local.jpeg");
+          await setTrackQR("");
+          await setRecordSongDetail(pickedRecord);
+
+          setTimeout(() => {
+            setTrack({ name: pickedRecord.fields.name, artists: [{ name: pickedRecord.fields.artist }] });
+            setTrackImage("./local.jpeg");
+            setTrackQR("");
+            setRecordSongDetail(pickedRecord);
+          }, 3000)
 
           setLocalRecordSongDetail(pickedRecord);
         }
