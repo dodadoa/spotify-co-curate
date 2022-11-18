@@ -164,7 +164,7 @@ export default function Home({ hello }) {
 
   const refresh = async () => {
     await fetchTablesAndRandomOneSong();
-    setTimeout(refresh, 10000);
+    setTimeout(refresh, N_MINUTES);
   };
 
   useEffect(() => {
