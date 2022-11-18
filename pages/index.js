@@ -69,16 +69,18 @@ export default function Home({ hello }) {
           return;
         }
 
-        getRecord(state.track_window.current_track.id)
-          .then((result) => {
-            setTrack(state.track_window.current_track);
-            setTrackImage(state.track_window.current_track.album.images[2].url);
-            setTrackQR(state.track_window.current_track.uri);
-            setRecordSongDetail(result);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        if (state.pause) {
+          getRecord(state.track_window.current_track.id)
+            .then((result) => {
+              setTrack(state.track_window.current_track);
+              setTrackImage(state.track_window.current_track.album.images[2].url);
+              setTrackQR(state.track_window.current_track.uri);
+              setRecordSongDetail(result);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
 
         player.getCurrentState().then((state) => {
           !state ? setActive(false) : setActive(true);
@@ -110,7 +112,7 @@ export default function Home({ hello }) {
         if (localSongAudioRef.current) {
           await localSongAudioRef.current.pause()
         }
-        
+
         setLocalRecordSongDetail("")
         await resumePlayer(session.user.accessToken);
         const result = await addSongToQueue(
@@ -222,7 +224,7 @@ export default function Home({ hello }) {
           <source type="audio/mp3" />
         </audio>
       </div>
-      
+
       {/* <button onClick={() => {
         player.togglePlay()
         player.activateElement()
