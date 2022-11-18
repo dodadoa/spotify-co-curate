@@ -32,7 +32,7 @@ export const resumePlayer = async (accessToken) => {
     const result = await spotifyApi.play()
     return result
   } catch (error) {
-    console.error('Error, pausePlayer', error)
+    console.error('Error, resumePlayer', error)
     throw error
   }
 }

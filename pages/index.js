@@ -69,24 +69,22 @@ export default function Home({ hello }) {
           return;
         }
 
-        if (state.pause) return
-
-        if (!state.pause) {
-          getRecord(state.track_window.current_track.id)
-            .then((result) => {
-              setTrack(state.track_window.current_track);
-              setTrackImage(state.track_window.current_track.album.images[2].url);
-              setTrackQR(state.track_window.current_track.uri);
-              setRecordSongDetail(result);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } else {
+        if (localSongDetail.length > 0) {
           setTrack({ name: localSongDetail.fields.name, artists: [] });
           setTrackImage("/done.svg");
           setTrackQR("");
           setRecordSongDetail(localSongDetail);
+        } else {
+          getRecord(state.track_window.current_track.id)
+          .then((result) => {
+            setTrack(state.track_window.current_track);
+            setTrackImage(state.track_window.current_track.album.images[2].url);
+            setTrackQR(state.track_window.current_track.uri);
+            setRecordSongDetail(result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         }
 
         player.getCurrentState().then((state) => {
@@ -117,9 +115,10 @@ export default function Home({ hello }) {
       if (pickedRecord.fields.source === "spotify") {
         console.log('SPOTIFY')
         if (localSongAudioRef.current) {
-          localSongAudioRef.current.pause()
+          await localSongAudioRef.current.pause()
         }
         
+        setLocalRecordSongDetail("")
         await resumePlayer(session.user.accessToken);
         const result = await addSongToQueue(
           session.user.accessToken,
@@ -133,21 +132,26 @@ export default function Home({ hello }) {
         if (pickedRecord.fields.source === "local") {
           console.log('LOCAL')
 
-          await nextSong(session.user.accessToken)
-          await pausePlayer(session.user.accessToken);
+          await pausePlayer(session.user.accessToken)
 
           setTrack({ name: pickedRecord.fields.name, artists: [] });
           setTrackImage("");
           setTrackQR("");
           setRecordSongDetail(pickedRecord);
 
-          localSongAudioRef.current.pause()
+          await localSongAudioRef.current.pause()
           localSongAudioRef.current = new Audio(pickedRecord.fields.localfile[0].url)
-          localSongAudioRef.current.play()
+          await localSongAudioRef.current.play()
+
+          setTrack({ name: pickedRecord.fields.name, artists: [] });
+          setTrackImage("/local.jpeg");
+          setTrackQR("");
+          setRecordSongDetail(pickedRecord);
 
           setLocalRecordSongDetail(pickedRecord);
         }
       } else {
+        console.log('NO LOCAL')
         await fetchTablesAndRandomOneSong()
       }
 
