@@ -127,7 +127,7 @@ export default function Home({ hello }) {
 
           await pausePlayer(session.user.accessToken)
 
-          setTrack({ name: pickedRecord.fields.name, artists: [] });
+          setTrack({ name: pickedRecord.fields.name, artists: [{ name: pickedRecord.fields.artist }] });
           setTrackImage("./local.jpeg");
           setTrackQR("");
           setRecordSongDetail(pickedRecord);
@@ -136,7 +136,7 @@ export default function Home({ hello }) {
           localSongAudioRef.current = new Audio(pickedRecord.fields.localfile[0].url)
           await localSongAudioRef.current.play()
 
-          setTrack({ name: pickedRecord.fields.name, artists: [] });
+          setTrack({ name: pickedRecord.fields.name, artists: [{ name: pickedRecord.fields.artist }] });
           setTrackImage("/local.jpeg");
           setTrackQR("");
           setRecordSongDetail(pickedRecord);
