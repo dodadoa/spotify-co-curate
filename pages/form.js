@@ -24,7 +24,7 @@ const Form = () => {
     handleSubmit,
     reset,
     watch,
-    formState: { errors, isValid, isDirty },
+    formState: { errors },
   } = useForm();
 
   const [disabledSubmit, setDisabledSubmit] = useState(true);

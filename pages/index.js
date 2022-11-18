@@ -10,16 +10,11 @@ import { set } from "react-hook-form";
 const N_MINUTES = 1000 * 60 * (process.env.NEXT_PUBLIC_NUMBER_MINUTES | 1);
 
 export default function Home({ hello }) {
-  const [player, setPlayer] = useState(null);
-  const [changing, setChanging] = useState(0);
-  const [isActive, setActive] = useState(false);
-  const [activeSession, setActiveSession] = useState({});
   const [recordSongDetail, setRecordSongDetail] = useState({
     fields: { caption: "", user: "" },
   });
   const [trackImage, setTrackImage] = useState("");
   const [trackQR, setTrackQR] = useState("");
-  const [localSongDetail, setLocalRecordSongDetail] = useState("")
 
   const videoRef = useRef();
   const localSongAudioRef = useRef();
@@ -36,7 +31,6 @@ export default function Home({ hello }) {
   const fetchSession = async () => {
     const session = await getSession();
 
-    setActiveSession(session);
     const accessToken = session.user.accessToken;
 
     const script = document.createElement("script");
@@ -79,10 +73,6 @@ export default function Home({ hello }) {
           .catch((err) => {
             console.log(err);
           });
-
-        player.getCurrentState().then((state) => {
-          !state ? setActive(false) : setActive(true);
-        });
       });
 
       player.connect();
@@ -112,7 +102,6 @@ export default function Home({ hello }) {
           await localSongAudioRef.current.pause()
         }
 
-        setLocalRecordSongDetail("")
         await resumePlayer(session.user.accessToken);
         const result = await addSongToQueue(
           session.user.accessToken,
@@ -148,8 +137,6 @@ export default function Home({ hello }) {
             setTrackQR("");
             setRecordSongDetail(pickedRecord);
           }, 3000)
-
-          setLocalRecordSongDetail(pickedRecord);
         }
       } else {
         console.log('NO LOCAL')
@@ -230,12 +217,6 @@ export default function Home({ hello }) {
           <source type="audio/mp3" />
         </audio>
       </div>
-
-      {/* <button onClick={() => {
-        player.togglePlay()
-        player.activateElement()
-      }}> PLAY </button>
-      <button onClick={handleNext}> NEXT </button> */}
     </div>
   );
 }
