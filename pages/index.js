@@ -19,6 +19,7 @@ export default function Home({ hello }) {
   });
   const [trackImage, setTrackImage] = useState("");
   const [trackQR, setTrackQR] = useState("");
+  const [localSongDetail, setLocalRecordSongDetail] = useState("")
 
   const videoRef = useRef();
   const localSongAudioRef = useRef();
@@ -72,15 +73,20 @@ export default function Home({ hello }) {
 
         if (!state.pause) {
           getRecord(state.track_window.current_track.id)
-          .then((result) => {
-            setTrack(state.track_window.current_track);
-            setTrackImage(state.track_window.current_track.album.images[2].url);
-            setTrackQR(state.track_window.current_track.uri);
-            setRecordSongDetail(result);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+            .then((result) => {
+              setTrack(state.track_window.current_track);
+              setTrackImage(state.track_window.current_track.album.images[2].url);
+              setTrackQR(state.track_window.current_track.uri);
+              setRecordSongDetail(result);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          setTrack({ name: localSongDetail.fields.name, artists: [] });
+          setTrackImage("/done.svg");
+          setTrackQR("");
+          setRecordSongDetail(localSongDetail);
         }
 
         player.getCurrentState().then((state) => {
@@ -128,6 +134,7 @@ export default function Home({ hello }) {
           console.log('LOCAL')
 
           await pausePlayer(session.user.accessToken);
+          await nextSong(session.user.accessToken)
 
           setTrack({ name: pickedRecord.fields.name, artists: [] });
           setTrackImage("");
@@ -138,10 +145,7 @@ export default function Home({ hello }) {
           localSongAudioRef.current = new Audio(pickedRecord.fields.localfile[0].url)
           localSongAudioRef.current.play()
 
-          setTrack({ name: pickedRecord.fields.name, artists: [] });
-          setTrackImage("");
-          setTrackQR("");
-          setRecordSongDetail(pickedRecord);
+          setLocalRecordSongDetail(pickedRecord);
         }
       } else {
         await fetchTablesAndRandomOneSong()
