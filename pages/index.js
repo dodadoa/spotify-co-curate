@@ -69,7 +69,7 @@ export default function Home({ hello }) {
           return;
         }
 
-        if (state.pause) {
+        if (state.pause && state.changing) {
           setTrack({ name: localSongDetail.fields.name, artists: [{ name: localSongDetail.fields.artist }] });
           setTrackImage("/done.svg");
           setTrackQR("");
@@ -132,6 +132,7 @@ export default function Home({ hello }) {
         if (pickedRecord.fields.source === "local") {
           console.log('LOCAL')
 
+          await nextSong(session.user.accessToken)
           await pausePlayer(session.user.accessToken)
 
           setTrack({ name: pickedRecord.fields.name, artists: [] });
