@@ -69,18 +69,16 @@ export default function Home({ hello }) {
           return;
         }
 
-        if (!state.pause) {
-          getRecord(state.track_window.current_track.id)
-            .then((result) => {
-              setTrack(state.track_window.current_track);
-              setTrackImage(state.track_window.current_track.album.images[2].url);
-              setTrackQR(state.track_window.current_track.uri);
-              setRecordSongDetail(result);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
+        getRecord(state.track_window.current_track.id)
+          .then((result) => {
+            setTrack(state.track_window.current_track);
+            setTrackImage(state.track_window.current_track.album.images[2].url);
+            setTrackQR(state.track_window.current_track.uri);
+            setRecordSongDetail(result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
 
         player.getCurrentState().then((state) => {
           !state ? setActive(false) : setActive(true);
