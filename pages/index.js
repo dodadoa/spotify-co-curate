@@ -48,8 +48,6 @@ export default function Home({ hello }) {
         volume: 0.5,
       });
 
-      setPlayer(player);
-
       player.addListener("ready", ({ device_id }) => {
         console.log("Ready with Device ID", device_id);
       });
