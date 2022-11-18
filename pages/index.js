@@ -133,8 +133,8 @@ export default function Home({ hello }) {
         if (pickedRecord.fields.source === "local") {
           console.log('LOCAL')
 
-          await pausePlayer(session.user.accessToken);
           await nextSong(session.user.accessToken)
+          await pausePlayer(session.user.accessToken);
 
           setTrack({ name: pickedRecord.fields.name, artists: [] });
           setTrackImage("");
