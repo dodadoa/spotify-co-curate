@@ -81,6 +81,7 @@ export default function Home({ hello }) {
             setTrackImage(state.track_window.current_track.album.images[2].url);
             setTrackQR(state.track_window.current_track.uri);
             setRecordSongDetail(result);
+            setRecordSongDetail("")
           })
           .catch((err) => {
             console.log(err);
