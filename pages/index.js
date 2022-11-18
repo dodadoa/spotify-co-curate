@@ -3,17 +3,15 @@ import { getSession } from "next-auth/react";
 import { isAuthenticated } from "../utils/isAuthenticated";
 import { tables, getRecord } from "../external/airtable";
 import style from "../styles/index.module.css";
-import { addSongToQueue } from "../external/spotify";
+import { addSongToQueue, resumePlayer, pausePlayer, nextSong } from "../external/spotify";
 import { randomCountableNumber } from "../utils/random";
+import { set } from "react-hook-form";
 
-//                    1s  * 60 = minute
-//                          1m * 4 = 4 minute
-const TWO_MINUTES = 1000 * 60 * 2;
+const N_MINUTES = 1000 * 60 * (process.env.NEXT_PUBLIC_NUMBER_MINUTES | 1);
 
 export default function Home({ hello }) {
   const [player, setPlayer] = useState(null);
   const [changing, setChanging] = useState(0);
-  const [isPaused, setPaused] = useState(false);
   const [isActive, setActive] = useState(false);
   const [activeSession, setActiveSession] = useState({});
   const [recordSongDetail, setRecordSongDetail] = useState({
@@ -23,6 +21,7 @@ export default function Home({ hello }) {
   const [trackQR, setTrackQR] = useState("");
 
   const videoRef = useRef();
+  const localSongAudioRef = useRef();
 
   const track = {
     name: "",
@@ -69,19 +68,20 @@ export default function Home({ hello }) {
           return;
         }
 
-        setTrack(state.track_window.current_track);
-        setTrackImage(state.track_window.current_track.album.images[2].url);
-        setTrackQR(state.track_window.current_track.uri);
+        if (state.pause) return
 
-        getRecord(state.track_window.current_track.id)
+        if (!state.pause) {
+          getRecord(state.track_window.current_track.id)
           .then((result) => {
+            setTrack(state.track_window.current_track);
+            setTrackImage(state.track_window.current_track.album.images[2].url);
+            setTrackQR(state.track_window.current_track.uri);
             setRecordSongDetail(result);
           })
           .catch((err) => {
             console.log(err);
           });
-
-        setPaused(state.paused);
+        }
 
         player.getCurrentState().then((state) => {
           !state ? setActive(false) : setActive(true);
@@ -103,17 +103,50 @@ export default function Home({ hello }) {
       const recordsLength = records.length;
       const randomNum = randomCountableNumber(recordsLength);
       const pickedRecord = records[randomNum];
+
       console.log(pickedRecord);
 
-      if (pickedRecord.fields.source === "spotify") {
-        const session = await getSession();
+      const session = await getSession();
 
+      if (pickedRecord.fields.source === "spotify") {
+        console.log('SPOTIFY')
+        if (localSongAudioRef.current) {
+          localSongAudioRef.current.pause()
+        }
+        
+        await resumePlayer(session.user.accessToken);
         const result = await addSongToQueue(
           session.user.accessToken,
           pickedRecord.fields.songId
         );
         console.log("Added song to queue!", result);
+        return
       }
+
+      if (process.env.NEXT_PUBLIC_FEATURE_LOCAL) {
+        if (pickedRecord.fields.source === "local") {
+          console.log('LOCAL')
+
+          await pausePlayer(session.user.accessToken);
+
+          setTrack({ name: pickedRecord.fields.name, artists: [] });
+          setTrackImage("");
+          setTrackQR("");
+          setRecordSongDetail(pickedRecord);
+
+          localSongAudioRef.current.pause()
+          localSongAudioRef.current = new Audio(pickedRecord.fields.localfile[0].url)
+          localSongAudioRef.current.play()
+
+          setTrack({ name: pickedRecord.fields.name, artists: [] });
+          setTrackImage("");
+          setTrackQR("");
+          setRecordSongDetail(pickedRecord);
+        }
+      } else {
+        await fetchTablesAndRandomOneSong()
+      }
+
     } catch (error) {
       console.error("fetchTablesAndRandomOneSong", error);
     }
@@ -121,7 +154,7 @@ export default function Home({ hello }) {
 
   const refresh = async () => {
     await fetchTablesAndRandomOneSong();
-    setTimeout(refresh, TWO_MINUTES);
+    setTimeout(refresh, 10000);
   };
 
   useEffect(() => {
@@ -157,7 +190,7 @@ export default function Home({ hello }) {
         </div>
       ) : null}
       <div className={style.trackImgWrapper}>
-        {trackImage ? (
+        {trackImage.length > 0 ? (
           <picture>
             <img className={style.trackImg} src={trackImage} alt="trackImage" />
           </picture>
@@ -181,6 +214,14 @@ export default function Home({ hello }) {
       <div className={style.captionMarquee}>
         <p className={style.captionInner}>-------{recordSongDetail.fields.caption}------</p>
       </div>
+
+
+      <div>
+        <audio ref={localSongAudioRef}>
+          <source type="audio/mp3" />
+        </audio>
+      </div>
+      
       {/* <button onClick={() => {
         player.togglePlay()
         player.activateElement()
