@@ -69,13 +69,7 @@ export default function Home({ hello }) {
           return;
         }
 
-        if (state.pause || state.changing) {
-          setTrack({ name: localSongDetail.fields.name, artists: [{ name: localSongDetail.fields.artist }] });
-          setTrackImage("/local.jpeg");
-          setTrackQR("");
-          setRecordSongDetail(localSongDetail);
-        } else {
-          getRecord(state.track_window.current_track.id)
+        getRecord(state.track_window.current_track.id)
           .then((result) => {
             setTrack(state.track_window.current_track);
             setTrackImage(state.track_window.current_track.album.images[2].url);
@@ -85,7 +79,6 @@ export default function Home({ hello }) {
           .catch((err) => {
             console.log(err);
           });
-        }
 
         player.getCurrentState().then((state) => {
           !state ? setActive(false) : setActive(true);
@@ -135,7 +128,7 @@ export default function Home({ hello }) {
           await pausePlayer(session.user.accessToken)
 
           setTrack({ name: pickedRecord.fields.name, artists: [] });
-          setTrackImage("");
+          setTrackImage("./local.jpeg");
           setTrackQR("");
           setRecordSongDetail(pickedRecord);
 
