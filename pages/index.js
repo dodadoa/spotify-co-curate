@@ -69,9 +69,9 @@ export default function Home({ hello }) {
           return;
         }
 
-        if (state.pause && state.changing) {
+        if (state.pause || state.changing) {
           setTrack({ name: localSongDetail.fields.name, artists: [{ name: localSongDetail.fields.artist }] });
-          setTrackImage("/done.svg");
+          setTrackImage("/local.jpeg");
           setTrackQR("");
           setRecordSongDetail(localSongDetail);
         } else {
