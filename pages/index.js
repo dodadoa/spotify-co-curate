@@ -102,6 +102,7 @@ export default function Home({ hello }) {
       const pickedRecord = records[randomNum];
 
       console.log(pickedRecord);
+      console.log(process.env.NEXT_PUBLIC_FEATURE_LOCAL)
 
       const session = await getSession();
 
