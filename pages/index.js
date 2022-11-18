@@ -69,7 +69,7 @@ export default function Home({ hello }) {
           return;
         }
 
-        if (state.pause) {
+        if (!state.pause) {
           getRecord(state.track_window.current_track.id)
             .then((result) => {
               setTrack(state.track_window.current_track);
