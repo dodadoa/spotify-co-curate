@@ -69,8 +69,8 @@ export default function Home({ hello }) {
           return;
         }
 
-        if (localSongDetail.length > 0) {
-          setTrack({ name: localSongDetail.fields.name, artists: [] });
+        if (state.pause) {
+          setTrack({ name: localSongDetail.fields.name, artists: [{ name: localSongDetail.fields.artist }] });
           setTrackImage("/done.svg");
           setTrackQR("");
           setRecordSongDetail(localSongDetail);
@@ -81,7 +81,6 @@ export default function Home({ hello }) {
             setTrackImage(state.track_window.current_track.album.images[2].url);
             setTrackQR(state.track_window.current_track.uri);
             setRecordSongDetail(result);
-            setRecordSongDetail("")
           })
           .catch((err) => {
             console.log(err);
