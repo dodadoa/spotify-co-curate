@@ -3,7 +3,7 @@ import style from "../styles/login.module.css"
 
 export default function Login() {
   const handleLogin = () => {
-    signIn('spotify', { callbackUrl: 'http://localhost:3000' })
+    signIn('spotify', { callbackUrl: 'http://localhost:3000' }, { prompt: "login" })
   }
 
   return (

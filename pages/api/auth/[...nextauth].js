@@ -55,14 +55,14 @@ export default NextAuth({
       clientId: process.env.SPOTIFY_CLIENT_ID,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
       authorization: {
-        params: { scope },
+        params: { scope, prompt: 'login' },
       },
     }),
   ],
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
     async jwt({ token, account, user }) {
-      if (account) {
+      if (account && user) {
         token.id = account.id;
         token.expires_at = account.expires_at;
         token.accessToken = account.access_token;
