@@ -5,7 +5,7 @@ import { tables, getRecord } from "../external/airtable";
 import style from "../styles/index.module.css";
 import { addSongToQueue, resumePlayer, pausePlayer, nextSong } from "../external/spotify";
 import { randomCountableNumber } from "../utils/random";
-import { set } from "react-hook-form";
+import { refreshAccessToken } from '../utils/auth'
 
 const N_MINUTES = 1000 * 60 * (process.env.NEXT_PUBLIC_NUMBER_MINUTES | 1);
 
@@ -90,6 +90,10 @@ export default function Home({ hello }) {
       const pickedRecord = records[randomNum];
 
       const session = await getSession();
+      let accessToken = session.user.accessToken
+      if (Date.now() >= session.user.accessTokenExpires) {
+        accessToken = refreshAccessToken(session.user.accessToken)
+      }
 
       if (pickedRecord.fields.source === "spotify") {
         console.log('SPOTIFY')
@@ -97,9 +101,9 @@ export default function Home({ hello }) {
           await localSongAudioRef.current.pause()
         }
 
-        await resumePlayer(session.user.accessToken);
+        await resumePlayer(accessToken);
         const result = await addSongToQueue(
-          session.user.accessToken,
+          accessToken,
           pickedRecord.fields.songId
         );
         console.log("Added song to queue!", result);
