@@ -94,7 +94,8 @@ export default function Home({ hello }) {
       const session = await getSession();
       let accessToken = session.user.accessToken
       if (Date.now() >= session.user.accessTokenExpires) {
-        accessToken = await refreshAccessToken(session.user)
+         const newSessionToken = await refreshAccessToken(session.user)
+         accessToken = newSessionToken.accessToken
       }
       console.log('access token', accessToken)
 
