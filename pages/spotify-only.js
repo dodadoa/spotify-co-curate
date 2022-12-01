@@ -97,7 +97,6 @@ export default function Home({ hello }) {
          const newSessionToken = await refreshAccessToken(session.user)
          accessToken = newSessionToken.accessToken
       }
-      console.log('access token', accessToken)
 
       if (pickedRecord.fields.source === "spotify") {
 
@@ -118,7 +117,7 @@ export default function Home({ hello }) {
 
   const refresh = async () => {
     await fetchTablesAndRandomOneSong();
-    setTimeout(refresh, 30000);
+    setTimeout(refresh, N_MINUTES);
   };
 
   useEffect(() => {
