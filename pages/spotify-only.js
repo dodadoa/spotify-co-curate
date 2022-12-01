@@ -61,6 +61,8 @@ export default function Home({ hello }) {
           return;
         }
 
+        console.log('track id', state.track_window.current_track.id)
+
         getRecord(state.track_window.current_track.id)
           .then((result) => {
             setTrack(state.track_window.current_track);
@@ -79,29 +81,25 @@ export default function Home({ hello }) {
 
   const fetchTablesAndRandomOneSong = async () => {
     try {
-      const tableData = await tables();
-      const { records } = tableData.data;
-      if (!records) {
+      const fullRecords = await tables();
+      if (fullRecords.length === 0) {
         console.log("Error, no Records");
         return;
       }
-      const recordsLength = records.length;
+      console.log('fullRecords', fullRecords)
+      const recordsLength = fullRecords.length;
       const randomNum = randomCountableNumber(recordsLength);
-      const pickedRecord = records[randomNum];
+      const pickedRecord = fullRecords[randomNum];
 
       const session = await getSession();
       let accessToken = session.user.accessToken
       if (Date.now() >= session.user.accessTokenExpires) {
-        accessToken = refreshAccessToken(session.user.accessToken)
+        accessToken = await refreshAccessToken(session.user)
       }
+      console.log('access token', accessToken)
 
       if (pickedRecord.fields.source === "spotify") {
-        console.log('SPOTIFY')
-        if (localSongAudioRef.current) {
-          await localSongAudioRef.current.pause()
-        }
 
-        await resumePlayer(accessToken);
         const result = await addSongToQueue(
           accessToken,
           pickedRecord.fields.songId
@@ -119,7 +117,7 @@ export default function Home({ hello }) {
 
   const refresh = async () => {
     await fetchTablesAndRandomOneSong();
-    setTimeout(refresh, N_MINUTES);
+    setTimeout(refresh, 30000);
   };
 
   useEffect(() => {

@@ -79,18 +79,14 @@ export default function Home({ hello }) {
 
   const fetchTablesAndRandomOneSong = async () => {
     try {
-      const tableData = await tables();
-      const { records } = tableData.data;
-      if (!records) {
+      const fullRecords = await tables();
+      if (fullRecords.length === 0) {
         console.log("Error, no Records");
         return;
       }
-      const recordsLength = records.length;
+      const recordsLength = fullRecords.length;
       const randomNum = randomCountableNumber(recordsLength);
-      const pickedRecord = records[randomNum];
-
-      console.log(pickedRecord);
-      console.log(process.env.NEXT_PUBLIC_FEATURE_LOCAL)
+      const pickedRecord = fullRecords[randomNum];
 
       const session = await getSession();
 

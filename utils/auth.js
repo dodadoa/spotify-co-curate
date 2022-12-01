@@ -3,8 +3,9 @@ import axios from 'axios'
 export const refreshAccessToken = async (token) => {
     try {
   
-      const clientId = process.env.SPOTIFY_CLIENT_ID
-      const clientSecret = process.env.SPOTIFY_CLIENT_SECRET
+      const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID
+      const clientSecret = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET
+      console.log(clientId)
       const encoded = btoa(clientId + ':' + clientSecret)
       const response = await axios({
         method: "post",

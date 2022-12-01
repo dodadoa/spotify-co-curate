@@ -7,25 +7,36 @@ const config = {
 }
 
 export const tables = async () => {
-  return await axios.get(
+  const page1 = await axios.get(
     "https://api.airtable.com/v0/appqFEOQnCcbDegfP/Table%201",
     config
   )
+
+  const offset = page1.data.offset
+
+  const page2 = await axios.get(
+    `https://api.airtable.com/v0/appqFEOQnCcbDegfP/Table%201?offset=${offset}`,
+    config
+  )
+
+  const fullRecords = [...page1.data.records , ...page2.data.records]
+  return fullRecords
 }
 
 export const getRecord = async (songId) => {
   try {
-    const { data } = await axios.get(
-      `https://api.airtable.com/v0/appqFEOQnCcbDegfP/Table%201`,
-      config
-    )
+    const fullRecords = await tables()
 
-    if (!data) {
+    if (fullRecords.length === 0) {
+      console.log('not found table')
       throw new Error('data not found')
     }
 
-    const record = data.records.find((record) => record.fields.songId === songId)
+    console.log('table', fullRecords)
+
+    const record = fullRecords.find((record) => record.fields.songId === songId)
     if (!record) {
+      console.log('not found in record')
       throw new Error('data not found')
     }
 
